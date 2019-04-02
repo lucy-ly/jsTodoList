@@ -1,130 +1,151 @@
-//HTML essentials, describes webpages. DOM Document Object Model - browsers interpretation
-<!DOCTYPE html>
-<html>
+// version10 html and dom
 
-    <head>
-        <link rel=“stylesheet” href=“styles.css”> //does not have a closing tag
-        <script src="script.js"></script>
-    </head>
+// booleans: true or false
+var todoList = {
+    todos: [],
 
-    <body>
-        <h1>Hello World!</h1>
-        <h2>Subsection title</h2>
-        <h3>Subsection title</h3>
-        <p>For text</p>
-    </body>
+    addTodo: function(todoText) {
+        this.todos.push({
+            todotext: todoText,
+            completed: false
+        });
+    },
 
-</html>
+    changeTodo: function(position, todoText) {
+        this.todos[position].todoText = todoText;
+    },
 
+    deleteTodo: function(position) {
+        this.todos.splice(position, 1);
+    },
 
-//There should be a "Display todos" button and a "Toggle all" button in the app
+    toggleCompleted: function(position) {
+        var todo = this.todos[position];
+        todo.completed = !todo.completed;
+    },
 
-<!DOCTYPE html>
-<html>
+    toggleAll: function() {
+        var totalTodos = this.todos.length;
+        var completedTodos = 0;
 
-    <head>
-        <link rel=“stylesheet” href=“styles.css”>
-        <script src="script.js"></script>
-    </head>
-
-    <body>
-        <h1>Todo List</h1>
-        
-        <button>Display Todos</button>
-        <button>Toggle All</button>
-        
-    </body>
-
-</html>
-
-
-//Clicking "Display todos" should run todoList.displayTodos
-
-<!DOCTYPE html>
-<html>
-
-    <head>
-        <link rel=“stylesheet” href=“styles.css”>
-    </head>
-
-    <body>
-        <h1>Todo List</h1>
-        
-        <button id="displayTodosButton">Display Todos</button>
-        <button>Toggle All</button>
-        
-        <script src="script.js"></script>
-  
-    </body>
-
-</html>
-
-//1. We want to get access to the display todos button.
-var displayTodosButton = document.getElementById('displayTodosButton'); 
-console.log(displayTodosButton);
-
-//2. We want to run displayTodos method, when someone clicks the display todos button.
-displayTodosButton.addEventListener('click", function() {
-    todoList.displayTodos();
-});
-
-//Clicking "Toggle all" should run todoList.toggleAll
-
-<!DOCTYPE html>
-<html>
-
-    <head>
-        <link rel=“stylesheet” href=“styles.css”>
-    </head>
-
-    <body>
-        <h1>Todo List</h1>
-        
-        <button id="displayTodosButton">Display Todos</button>
-        <button id="toggleAllButton">Toggle All</button>
-        
-        <script src="script.js"></script>
-  
-    </body>
-
-</html>
-
-
-//.toggleAll: Otherwise, make everything true.
-toggleAll: function() {
-    var totalTodos = this.todos.length;
-    var completedTodos = 0;
-    
-    //Get number of completed todos.
-    for (var i = 0; i < totalTodos; i++) {
-        if (this.todos[i].completed === true) {
-            completedTodos++;
-        }
-    }
-    //Case 1: If everything's true, make everything false.
-    if (completedTodos === totalTodos) {
+        // get number of completed todos.
         for (var i = 0; i < totalTodos; i++) {
-            this.todos[i].completed = false;
+            if (this.todos[i].completed === true) {
+                completedTodos++;
+            }
         }
-    
-    //Case 2: Otherwise, make everything true.
-    } else {
-        for (var i = 0)
-    }
-    
-        this.displayTodos();
+        // Case 1: If evertyting is true, make everything false.
+        if (completedTodos === totalTodos) {
+            // make everything false
+            for (var i = 0; i < totalTodos; i++) {
+                this.todos[i].completed = false;
+            }
+            // Case 1: otherwise, make everything false.
+        }
+        else {
+            for (var i = 0; i < totalTodos; i++) {
+                this.todos[i].completed = true;
+            }
+        }
     }
 };
 
-var displayTodosButton = document.getElementById('displayTodosButton'); 
-console.log(displayTodosButton);
-var toggleAllButton = document.getElementById('toggleAllButton'); 
-console.log(toggleAllButton);
+// // 1. We want to get access to the display todos button.
+// var displayTodosButton = document.getElementById('displayTodosButton');
+// var toggleAllButton = document.getElementById("toggleAllButton");
+
+// // 2. We want to run the display todos method 
+// //    when someone click display todos button.
+// displayTodosButton.addEventListener('click', function(){
+//     todosList.displayTodos();
+// });
+
+// toggleAllButton.addEventListener('click', function(){
+//     todosList.toggleAll();
+// });
+
+// Refactoring code Above
+var handlers = {
+    toggleAll: function() {
+        todoList.toggleAll();
+    },
+    addTodo: function() {
+        var addTodoTextInput = document.getElementById('addTodoTextInput');
+        todoList.addTodo(addTodoTextInput.value);
+        addTodoTextInput.value = '';
+        view.displayTodos();
+    },
+    changeTodo: function() {
+        var changeTodoPositionInput = document.getElementById('changeTodoPositionInput');
+        var changeTodoTextInput = document.getElementById('changeTodoTextInput');
+        todoList.changeTodo(changeTodoPositionInput.valueAsNumber, changeTodoTextInput.value);
+        changeTodoPositionInput.value = '';
+        changeTodoTextInput.value = '';
+        view.displayTodos();
+
+    },
+    deleteTodo: function(position) {
+        todoList.deleteTodo(position);
+        view.displayTodos();
+
+    },
+
+    toggleCompleted: function() {
+        var toggleCompletedPositionInput = document.getElementById('toggleCompletedPositionInput');
+        todoList.toggleCompleted(toggleCompletedPositionInput.valueAsNumber)
+        toggleCompletedPositionInput.value = '';
+    },
+
+};
+var view = {
+    displayTodos: function() {
+        var todosUl = document.querySelector('ul');
+        todosUl.innerHTML = '';
+        for (var i = 0; i < todoList.todos.length; i++) {
+            var todoLi = document.createElement('li');
+            todosUl.appendChild(todoLi);
+        }
+    }
+};
+var view = {
+    displayTodos: function() {
+        var todosUl = document.querySelector('ul');
+        todosUl.innerHTML = '';
+        for (var i = 0; i < todoList.todos.length; i++) {
+            var todoLi = document.createElement('li');
+            var todo = todoList.todos[i];
+            var todoTextWithCompletion = '';
+
+            if (todo.completed === true) {
+                todoTextWithCompletion = '(x)' + todo.todoText;
+            }
+            else {
+                todoTextWithCompletion = '( )' + todo.todoText;
+            }
+            todoLi.id = i;
+            todoLi.textContent = todoTextWithCompletion;
+            todoLi.appendChild(this.createDeleteButton());
+            todosUl.appendChild(todoLi);
+        }
+    },
+    createDeleteButton: function() {
+        var deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.className = 'deleteButton';
+        return deleteButton;
+    },
+    setUpEventListeners: function() {
+        var todosUl = document.querySelector('ul');
+        
+        todosUl.addEventListener('click', function(event) {
+            var elementClicked = event.target;
+            
+            if (elementClicked.className === 'deleteButton') {
+                handlers.deleteTodo(parseInt(elementClicked.parentNode.id));
+                }
+        });
+    }
+};
 
 
-displayTodosButton.addEventListener('click", function() {
-    todoList.displayTodos();
-});
-toggleAllButton.addEventListener('click", function() {
-    todoList.toggleAll();
-});
+view.setUpEventListeners();
