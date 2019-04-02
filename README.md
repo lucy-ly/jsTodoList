@@ -1,0 +1,1 @@
+completed Gordon Zhu watchandcode.com Practical JavaScript
