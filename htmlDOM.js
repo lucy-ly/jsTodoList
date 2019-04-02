@@ -1,4 +1,4 @@
-// version10 html and dom
+// version11 html and dom
 
 // booleans: true or false
 var todoList = {
@@ -29,25 +29,48 @@ var todoList = {
         var completedTodos = 0;
 
         // get number of completed todos.
-        for (var i = 0; i < totalTodos; i++) {
-            if (this.todos[i].completed === true) {
+        // for (var i = 0; i < totalTodos; i++) {
+        //     if (this.todos[i].completed === true) {
+        //         completedTodos++;
+        //     }
+        // }
+        
+        // forEach Method
+        this.todos.forEach(function(todo) {
+            if (todo.completewd === true) {
                 completedTodos++;
             }
-        }
-        // Case 1: If evertyting is true, make everything false.
-        if (completedTodos === totalTodos) {
-            // make everything false
-            for (var i = 0; i < totalTodos; i++) {
-                this.todos[i].completed = false;
+        });
+        
+        // // Case 1: If evertyting is true, make everything false.
+        // if (completedTodos === totalTodos) {
+        //     // make everything false
+            
+        // // Case 2: otherwise, make everything false.
+        // // }
+        //     this.todos.forEach(function(todo){
+        //     todo.completed = false;
+        // });
+    
+        // }  else {
+        //     // for (var i = 0; i < totalTodos; i++) {
+        //     //     this.todos[i].completed = true;
+        //     // }
+        //     this.todos.forEach(function(todo){
+        //     todo.completed = true;
+        //     });
+        // }
+        
+        this.todos.forEach(function(todo){
+            // Case: 1 If everything is true, make everuthing false.
+            if (completedTodos === totalTodos){
+                todo.completed = false;
+            // Case: 2 Otherwise, make everyhting true.
+            } else {
+                todo.completed = true;
             }
-            // Case 1: otherwise, make everything false.
-        }
-        else {
-            for (var i = 0; i < totalTodos; i++) {
-                this.todos[i].completed = true;
-            }
-        }
-    }
+        });
+    }   
 };
 
 // // 1. We want to get access to the display todos button.
@@ -87,7 +110,6 @@ var handlers = {
     deleteTodo: function(position) {
         todoList.deleteTodo(position);
         view.displayTodos();
-
     },
 
     toggleCompleted: function() {
@@ -111,23 +133,42 @@ var view = {
     displayTodos: function() {
         var todosUl = document.querySelector('ul');
         todosUl.innerHTML = '';
-        for (var i = 0; i < todoList.todos.length; i++) {
+        // for (var i = 0; i < todoList.todos.length; i++) {
+        //     var todoLi = document.createElement('li');
+        //     var todo = todoList.todos[i];
+        //     var todoTextWithCompletion = '';
+
+        //     if (todo.completed === true) {
+        //         todoTextWithCompletion = '(x)' + todo.todoText;
+        //     }
+        //     else {
+        //         todoTextWithCompletion = '( )' + todo.todoText;
+        //     }
+        //     todoLi.id = i;
+        //     todoLi.textContent = todoTextWithCompletion;
+        //     todoLi.appendChild(this.createDeleteButton());
+        //     todosUl.appendChild(todoLi);
+        // }
+        
+        // this refers to the view object
+        // for Each(callback, this)
+        
+        todoList.todos.forEach(function(todo, position) {
             var todoLi = document.createElement('li');
-            var todo = todoList.todos[i];
             var todoTextWithCompletion = '';
 
             if (todo.completed === true) {
                 todoTextWithCompletion = '(x)' + todo.todoText;
-            }
-            else {
+            } else {
                 todoTextWithCompletion = '( )' + todo.todoText;
             }
-            todoLi.id = i;
+            todoLi.id = position;
             todoLi.textContent = todoTextWithCompletion;
             todoLi.appendChild(this.createDeleteButton());
             todosUl.appendChild(todoLi);
-        }
+        }, this);
     },
+    
     createDeleteButton: function() {
         var deleteButton = document.createElement('button');
         deleteButton.textContent = 'Delete';
@@ -146,6 +187,5 @@ var view = {
         });
     }
 };
-
 
 view.setUpEventListeners();
