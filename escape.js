@@ -1,1 +1,1 @@
-Escape from the console
+//Escape from the console
